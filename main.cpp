@@ -107,7 +107,7 @@ int main(int argc, char* argv[]) {
 	
 	pcap_t* handle = pcap_open_live(dev,BUFSIZ,1,1000,errbuf);
 	
-	if(handle == NULL || handle == NULL)
+	if(handle == NULL)
 	{
 		fprintf(stderr,"couldn't oepn device %s: %s\n",dev, errbuf);
 		return -1;
