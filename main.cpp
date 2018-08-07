@@ -116,13 +116,14 @@ int main(int argc, char* argv[]) {
 	memcpy(request_packet+14,&arp,28);
 	
 	// arp request packet
+	/*
 	for(int i=0;i<42;i++)
 	{
 		if(i%16 == 0) {printf("\n");}
 		printf("%02x ", request_packet[i]);
 	}
 	printf("\n");	
-	
+	*/
 		
 	if(pcap_sendpacket(handle,request_packet,42)!= 0)
 	{
